@@ -1,0 +1,90 @@
+<div class="catalog-page">
+
+  <!-- Header -->
+  <section class="catalog-header">
+    <h1 class="page-title">Dulcerías disponibles</h1>
+    <p class="page-subtitle">Encuentra los mejores postres artesanales de tu municipio</p>
+  </section>
+
+  <!-- Filtros -->
+  <section class="filters" aria-label="Filtros de búsqueda">
+    <div class="filter-group">
+      <label for="municipio" class="filter-label">Municipio</label>
+      <input
+        id="municipio"
+        type="text"
+        [(ngModel)]="municipioFilter"
+        placeholder="Ej: Centro Habana"
+        class="filter-input"
+        (keydown.enter)="applyFilter()"
+      />
+    </div>
+
+    <div class="filter-actions">
+      <button class="btn-filter" (click)="applyFilter()">Buscar</button>
+      <button class="btn-clear" (click)="clearFilters()" *ngIf="municipioFilter || provinciaFilter">
+        Limpiar filtros
+      </button>
+    </div>
+  </section>
+
+  <!-- Loading skeleton -->
+  <div class="grid" *ngIf="loading()" aria-busy="true" aria-label="Cargando dulcerías">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6,7,8]"></div>
+  </div>
+
+  <!-- Error -->
+  <div class="error-state" *ngIf="!loading() && error()" role="alert">
+    <p>{{ error() }}</p>
+    <button class="btn-filter" (click)="load()">Reintentar</button>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!loading() && !error() && dulcerias().length === 0">
+    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#d63384" stroke-width="1.5" aria-hidden="true">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <p>No encontramos dulcerías con ese filtro.</p>
+    <button class="btn-clear" (click)="clearFilters()">Ver todas</button>
+  </div>
+
+  <!-- Grid de resultados -->
+  <div class="grid" *ngIf="!loading() && !error() && dulcerias().length > 0" role="list">
+    <app-dulceria-card
+      *ngFor="let d of dulcerias(); trackBy: trackByDulceria"
+      [dulceria]="d"
+      role="listitem"
+    />
+  </div>
+
+  <!-- Paginación -->
+  <nav class="pagination" *ngIf="!loading() && totalPages() > 1" aria-label="Paginación">
+    <button
+      class="page-btn"
+      [disabled]="page() === 1"
+      (click)="goToPage(page() - 1)"
+      aria-label="Página anterior"
+    >&larr;</button>
+
+    <button
+      *ngFor="let p of pages()"
+      class="page-btn"
+      [class.active]="p === page()"
+      (click)="goToPage(p)"
+      [attr.aria-current]="p === page() ? 'page' : null"
+    >{{ p }}</button>
+
+    <button
+      class="page-btn"
+      [disabled]="page() === totalPages()"
+      (click)="goToPage(page() + 1)"
+      aria-label="Página siguiente"
+    >&rarr;</button>
+  </nav>
+
+  <!-- Total -->
+  <p class="results-count" *ngIf="!loading() && total() > 0" aria-live="polite">
+    {{ total() }} dulcería{{ total() !== 1 ? 's' : '' }} encontrada{{ total() !== 1 ? 's' : '' }}
+  </p>
+
+</div>

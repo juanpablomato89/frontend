@@ -1,0 +1,72 @@
+<div class="orders-page">
+  <h1 class="page-title">Mis pedidos</h1>
+
+  <!-- Loading skeleton -->
+  <div class="skeleton-list" *ngIf="loading()" aria-busy="true" aria-label="Cargando pedidos">
+    <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
+  </div>
+
+  <!-- Error state -->
+  <div class="error-state" *ngIf="!loading() && error()">
+    <p>{{ error() }}</p>
+    <button class="btn-retry" (click)="load()">Reintentar</button>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!loading() && !error() && orders().length === 0">
+    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#dee2e6" stroke-width="1.5" aria-hidden="true">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 0 1-8 0"/>
+    </svg>
+    <p>Aún no tienes pedidos.</p>
+    <a class="btn-explore" routerLink="/catalog">Explorar dulcerías</a>
+  </div>
+
+  <!-- Orders list -->
+  <ul class="orders-list" role="list" *ngIf="!loading() && !error() && orders().length > 0">
+    <li
+      class="order-card"
+      *ngFor="let order of orders(); trackBy: trackByOrder"
+      (click)="viewOrder(order.id)"
+      role="button"
+      tabindex="0"
+      (keydown.enter)="viewOrder(order.id)"
+      (keydown.space)="viewOrder(order.id)"
+      [attr.aria-label]="'Ver pedido del ' + (order.creadoEn | date:'dd/MM/yyyy')"
+    >
+      <div class="order-meta">
+        <span class="order-date">{{ order.creadoEn | date:'dd MMM yyyy, HH:mm' }}</span>
+        <span class="order-type" [class.delivery]="order.tipoEntrega === 'Delivery'">
+          {{ order.tipoEntrega === 'Delivery' ? 'Delivery' : 'Recogida' }}
+        </span>
+      </div>
+
+      <div class="order-items-preview">
+        {{ order.items.length }} producto{{ order.items.length !== 1 ? 's' : '' }}
+        —
+        <span class="item-names">{{ itemsPreview(order) }}</span>
+      </div>
+
+      <div class="order-footer">
+        <span class="order-total">${{ order.totalUsd | number:'1.2-2' }}</span>
+        <span class="status-badge" [ngClass]="statusClass(order.estado)">
+          {{ statusLabel(order.estado) }}
+        </span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </div>
+    </li>
+  </ul>
+
+  <!-- Pagination -->
+  <nav class="pagination" aria-label="Páginas" *ngIf="totalPages() > 1">
+    <button
+      class="page-btn"
+      [class.active]="p === page()"
+      *ngFor="let p of pages()"
+      (click)="goToPage(p)"
+      [attr.aria-current]="p === page() ? 'page' : null"
+    >{{ p }}</button>
+  </nav>
+</div>

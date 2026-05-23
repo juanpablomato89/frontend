@@ -1,0 +1,35 @@
+<article class="product-card">
+  <div class="card-image-wrapper">
+    <img
+      [src]="producto.imagenUrl || 'assets/images/product-placeholder.webp'"
+      [alt]="producto.nombre"
+      class="card-image"
+      loading="lazy"
+      width="300" height="200"
+    />
+    <span class="badge-agotado" *ngIf="!producto.disponible" aria-label="Producto agotado">Agotado</span>
+  </div>
+
+  <div class="card-body">
+    <p class="card-categoria" *ngIf="producto.categoria">{{ producto.categoria }}</p>
+    <h3 class="card-title">{{ producto.nombre }}</h3>
+    <p class="card-desc" *ngIf="producto.descripcion">{{ producto.descripcion }}</p>
+
+    <div class="card-footer">
+      <div class="prices">
+        <span class="price-usd">${{ producto.precioUsd | number:'1.2-2' }}</span>
+        <span class="price-cup">{{ producto.precioCup | number:'1.0-0' }} CUP</span>
+      </div>
+      <button
+        class="btn-add"
+        [disabled]="!producto.disponible"
+        (click)="onAdd()"
+        [attr.aria-label]="'Agregar ' + producto.nombre + ' al carrito'"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</article>

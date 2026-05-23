@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-auth-layout',
   standalone: true,
   imports: [RouterOutlet],
-  template: `<router-outlet />`,
+  templateUrl: './auth-layout.component.html',
+  styleUrl: './auth-layout.component.scss',
 })
 export class AuthLayoutComponent {}

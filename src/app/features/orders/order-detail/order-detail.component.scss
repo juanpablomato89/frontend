@@ -1,0 +1,391 @@
+/* =========================================================
+   Order Detail Page
+   ========================================================= */
+.order-detail-page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+/* ── Page header ─────────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.btn-back {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border: 1px solid #e9ecef;
+  background: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #495057;
+  transition: background 150ms ease, border-color 150ms ease;
+
+  &:hover { background: #f8f9fa; border-color: #dee2e6; }
+  &:focus-visible { outline: 2px solid #e91e8c; outline-offset: 2px; }
+}
+
+.page-title {
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+/* ── Skeleton ────────────────────────────────────────────── */
+.skeleton-block {
+  height: 420px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #f0f0f5 25%, #e4e4ed 50%, #f0f0f5 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ── Error state ─────────────────────────────────────────── */
+.error-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+
+  p { margin: 0 0 1rem; }
+}
+
+.btn-link {
+  color: #e91e8c;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+
+  &:hover { text-decoration: underline; }
+}
+
+/* ── Two-column detail layout ────────────────────────────── */
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
+  align-items: start;
+}
+
+.left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Cancelled banner ────────────────────────────────────── */
+.cancelled-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8d7da;
+  border: 1px solid #f5c2c7;
+  color: #721c24;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+}
+
+/* ── Sections ────────────────────────────────────────────── */
+.timeline-section,
+.items-section,
+.rating-section {
+  background: #fff;
+  border: 1px solid #f0f0f5;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Timeline ────────────────────────────────────────────── */
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-step {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.5rem 0;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: calc(50% + 12px);
+    width: 2px;
+    height: calc(100% - 10px);
+    background: #e9ecef;
+    z-index: 0;
+  }
+
+  &:last-child::before { display: none; }
+
+  &.reached {
+    &::before { background: #e91e8c; }
+    .step-dot { background: #e91e8c; border-color: #e91e8c; color: #fff; }
+    .step-label { color: #1a1a2e; font-weight: 600; }
+  }
+
+  &.current .step-dot {
+    background: #fff;
+    border-color: #e91e8c;
+    color: #e91e8c;
+    box-shadow: 0 0 0 4px rgba(233, 30, 140, 0.12);
+  }
+}
+
+.step-dot {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 50%;
+  border: 2px solid #dee2e6;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.step-label {
+  font-size: 0.88rem;
+  color: #adb5bd;
+  transition: color 200ms ease;
+}
+
+/* ── Items list ──────────────────────────────────────────── */
+.items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.order-item {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 0.4rem;
+  align-items: baseline;
+  font-size: 0.9rem;
+}
+
+.item-qty {
+  font-weight: 700;
+  color: #e91e8c;
+  text-align: right;
+}
+
+.item-name {
+  color: #495057;
+}
+
+.item-price {
+  font-weight: 600;
+  color: #1a1a2e;
+  white-space: nowrap;
+}
+
+/* ── Rating ──────────────────────────────────────────────── */
+.stars-row {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #dee2e6;
+  padding: 0.1rem;
+  border-radius: 6px;
+  transition: color 120ms ease, transform 100ms ease;
+
+  &.filled { color: #f59f00; }
+  &:hover  { transform: scale(1.15); }
+  &:focus-visible { outline: 2px solid #f59f00; outline-offset: 2px; }
+}
+
+.comment-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.65rem 0.875rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #1a1a2e;
+  background: #fafafa;
+  border: 1.5px solid #e9ecef;
+  border-radius: 10px;
+  outline: none;
+  resize: vertical;
+  margin-bottom: 1rem;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+
+  &::placeholder { color: #ced4da; }
+  &:focus {
+    border-color: #e91e8c;
+    box-shadow: 0 0 0 3px rgba(233, 30, 140, 0.1);
+    background: #fff;
+  }
+}
+
+.btn-rating-submit {
+  padding: 0.65rem 1.5rem;
+  background: linear-gradient(135deg, #e91e8c, #c2185b);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: filter 150ms ease;
+
+  &:hover:not(:disabled) { filter: brightness(1.08); }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+  &:focus-visible { outline: 2px solid #e91e8c; outline-offset: 2px; }
+}
+
+.rating-done {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: #2f9e44;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  background: #ebfbee;
+  border-radius: 10px;
+  border: 1px solid #b2f2bb;
+}
+
+/* ── Cancel ──────────────────────────────────────────────── */
+.cancel-error {
+  font-size: 0.82rem;
+  color: #dc3545;
+  margin: 0;
+}
+
+.btn-cancel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background: transparent;
+  border: 1.5px solid #dc3545;
+  color: #dc3545;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 150ms ease, color 150ms ease;
+
+  &:hover:not(:disabled) {
+    background: #dc3545;
+    color: #fff;
+  }
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+  &:focus-visible { outline: 2px solid #dc3545; outline-offset: 2px; }
+}
+
+/* ── Summary sidebar ─────────────────────────────────────── */
+.summary-col {
+  position: sticky;
+  top: 80px;
+}
+
+.summary-card {
+  background: #fff;
+  border: 1px solid #f0f0f5;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 0.88rem;
+  color: #495057;
+  margin-bottom: 0.5rem;
+  gap: 1rem;
+
+  &.total-row {
+    font-size: 1rem;
+    color: #1a1a2e;
+    margin-top: 0.25rem;
+  }
+
+  &.muted-row {
+    font-size: 0.78rem;
+    color: #9e9eb8;
+  }
+}
+
+.address {
+  text-align: right;
+  font-size: 0.82rem;
+  color: #6c757d;
+  max-width: 160px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #f0f0f5;
+  margin: 0.75rem 0;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+@media (max-width: 768px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-col {
+    position: static;
+    order: -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-detail-page {
+    padding: 1.25rem 1rem 3rem;
+  }
+}

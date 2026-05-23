@@ -5,9 +5,18 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { User } from '../../models/user.model';
 
-interface LoginRequest { email?: string; telefono?: string; password: string; }
-interface RegisterRequest { nombre: string; email?: string; telefonoWhatsapp?: string; password: string; }
-interface AuthResult { user: User; }
+export interface LoginRequest { email?: string; telefono?: string; password: string; }
+export interface RegisterRequest { nombre: string; email?: string; telefonoWhatsapp?: string; password: string; rol?: string; }
+
+/** Forma que devuelve el backend: campos del usuario directamente */
+export interface AuthResult {
+  id: string;
+  nombre: string;
+  email: string | null;
+  telefonoWhatsapp: string | null;
+  rol: string;
+  plan: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -22,13 +31,13 @@ export class AuthService {
   login(payload: LoginRequest): Observable<AuthResult> {
     return this.http
       .post<AuthResult>(`${this.apiUrl}/login`, payload, { withCredentials: true })
-      .pipe(tap(res => this.setSession(res.user)));
+      .pipe(tap(res => this.setSession(res)));
   }
 
   register(payload: RegisterRequest): Observable<AuthResult> {
     return this.http
       .post<AuthResult>(`${this.apiUrl}/register`, payload, { withCredentials: true })
-      .pipe(tap(res => this.setSession(res.user)));
+      .pipe(tap(res => this.setSession(res)));
   }
 
   logout(): void {
@@ -41,10 +50,20 @@ export class AuthService {
   refreshSession(): Observable<AuthResult> {
     return this.http
       .post<AuthResult>(`${this.apiUrl}/refresh`, {}, { withCredentials: true })
-      .pipe(tap(res => this.setSession(res.user)));
+      .pipe(tap(res => this.setSession(res)));
   }
 
-  private setSession(user: User): void {
+  private setSession(res: AuthResult): void {
+    const user: User = {
+      id: res.id,
+      nombre: res.nombre,
+      email: res.email,
+      telefonoWhatsapp: res.telefonoWhatsapp,
+      rol: res.rol as User['rol'],
+      planSuscripcion: (res.plan ?? 'Gratuito') as User['planSuscripcion'],
+      suscripcionVenceEn: null,
+      activo: true,
+    };
     this.currentUser.set(user);
     this.isAuthenticated.set(true);
   }
