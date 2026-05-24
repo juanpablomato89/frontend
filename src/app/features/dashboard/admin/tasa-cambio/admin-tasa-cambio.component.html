@@ -1,0 +1,74 @@
+<div class="tasa-page">
+  <div class="page-header">
+    <h1 class="page-title">Tasa de cambio</h1>
+  </div>
+
+  <!-- Current rate card -->
+  <div class="current-card" *ngIf="!loading() && tasa()">
+    <div class="current-label">Tasa vigente</div>
+    <div class="current-rate">
+      <span class="rate-big">{{ tasa()!.usdACup | number:'1.0-0' }}</span>
+      <span class="rate-unit">CUP / USD</span>
+    </div>
+    <div class="current-meta">
+      <span>1 USD = {{ tasa()!.usdACup | number:'1.0-0' }} CUP</span>
+      <span class="sep">·</span>
+      <span>Desde {{ tasa()!.vigenteDesde | date:'d MMM yyyy, HH:mm' }}</span>
+      <span *ngIf="tasa()!.nota" class="sep">·</span>
+      <span *ngIf="tasa()!.nota" class="nota">{{ tasa()!.nota }}</span>
+    </div>
+  </div>
+
+  <div class="no-tasa" *ngIf="!loading() && !tasa()">
+    <p>No hay tasa de cambio registrada aún.</p>
+  </div>
+
+  <!-- Success banner -->
+  <div class="success-banner" *ngIf="saved()" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    Tasa actualizada correctamente.
+  </div>
+
+  <!-- Form -->
+  <div class="form-card">
+    <h2 class="form-title">Establecer nueva tasa</h2>
+    <p class="form-hint">Cada actualización crea un registro histórico. La tasa anterior no se elimina.</p>
+
+    <form [formGroup]="form" (ngSubmit)="save()" novalidate class="tasa-form">
+
+      <div class="form-field" [class.has-error]="form.get('usdACup')?.invalid && form.get('usdACup')?.touched">
+        <label for="usdACup">1 USD equivale a (CUP) <span class="req">*</span></label>
+        <div class="input-group">
+          <span class="prefix">CUP</span>
+          <input id="usdACup" type="number" min="1" max="10000" step="0.5"
+                 formControlName="usdACup" placeholder="350" inputmode="numeric" />
+        </div>
+        <span *ngIf="form.get('usdACup')?.invalid && form.get('usdACup')?.touched"
+              class="field-error" role="alert">
+          Ingresa un valor entre 1 y 10,000.
+        </span>
+        <span class="helper-text" *ngIf="cupPreview > 0">
+          Ejemplo: $10 USD = {{ (10 * cupPreview) | number:'1.0-0' }} CUP
+        </span>
+      </div>
+
+      <div class="form-field">
+        <label for="nota">Nota (opcional)</label>
+        <input id="nota" type="text" formControlName="nota"
+               placeholder="Ej. Ajuste por mercado informal" />
+      </div>
+
+      <div *ngIf="saveError()" class="form-error" role="alert">{{ saveError() }}</div>
+
+      <button type="submit" class="btn-save" [disabled]="form.invalid || saving()">
+        <svg *ngIf="!saving()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span>{{ saving() ? 'Guardando...' : 'Actualizar tasa' }}</span>
+      </button>
+
+    </form>
+  </div>
+</div>

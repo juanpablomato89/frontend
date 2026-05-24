@@ -1,0 +1,109 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">Usuarios</h1>
+    <span class="total-badge" *ngIf="total() > 0">{{ total() | number }} total</span>
+  </div>
+
+  <div class="filters">
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="search" class="search-input" placeholder="Buscar por nombre o email..."
+             [ngModel]="search()" (ngModelChange)="onSearch($event)" aria-label="Buscar usuarios" />
+    </div>
+    <label for="rolFilter" class="sr-only">Filtrar por rol</label>
+    <select id="rolFilter" class="select-filter" [(ngModel)]="filtroRol" (change)="onRolChange()">
+      <option value="">Todos los roles</option>
+      <option value="Admin">Admin</option>
+      <option value="Dulceria">Dulcería</option>
+      <option value="Cliente">Cliente</option>
+      <option value="Invitado">Invitado</option>
+    </select>
+  </div>
+
+  <!-- Skeleton -->
+  <div class="skeleton-list" *ngIf="loading()" aria-busy="true">
+    <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5,6,7]"></div>
+  </div>
+
+  <!-- Error -->
+  <div class="error-state" *ngIf="!loading() && error()">
+    <p>{{ error() }}</p>
+    <button class="btn-retry" (click)="load()">Reintentar</button>
+  </div>
+
+  <!-- Empty -->
+  <div class="empty-state" *ngIf="!loading() && !error() && usuarios().length === 0">
+    <p>No se encontraron usuarios.</p>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap" *ngIf="!loading() && !error() && usuarios().length > 0">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Contacto</th>
+          <th>Rol</th>
+          <th>Plan</th>
+          <th>Registro</th>
+          <th>Estado</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of usuarios()">
+          <td class="td-user">
+            <div class="user-avatar">{{ u.nombre[0]?.toUpperCase() }}</div>
+            <div>
+              <p class="user-name">{{ u.nombre }}</p>
+            </div>
+          </td>
+          <td class="td-contact">
+            <span *ngIf="u.email">{{ u.email }}</span>
+            <span *ngIf="!u.email && u.telefonoWhatsapp">{{ u.telefonoWhatsapp }}</span>
+            <span *ngIf="!u.email && !u.telefonoWhatsapp" class="muted">—</span>
+          </td>
+          <td>
+            <span class="badge-rol" [class]="'rol-' + u.rol.toLowerCase()">{{ u.rol }}</span>
+          </td>
+          <td>
+            <span class="muted">{{ u.planSuscripcion }}</span>
+          </td>
+          <td class="muted">{{ u.creadoEn | date:'d MMM yyyy' }}</td>
+          <td>
+            <span class="badge-estado" [class.activo]="u.activo">
+              {{ u.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
+            <button
+              class="btn-toggle-user"
+              [class.deactivate]="u.activo"
+              [disabled]="togglingId() === u.id || u.rol === 'Admin'"
+              (click)="toggle(u)"
+              [attr.aria-label]="u.activo ? 'Desactivar usuario' : 'Activar usuario'">
+              {{ u.activo ? 'Desactivar' : 'Activar' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="total() > pageSize">
+    <button class="btn-page" (click)="prevPage()" [disabled]="page() === 1" aria-label="Página anterior">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+    <span class="page-info">Página {{ page() }} de {{ totalPages() }}</span>
+    <button class="btn-page" (click)="nextPage()" [disabled]="page() >= totalPages()" aria-label="Página siguiente">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </button>
+  </div>
+</div>

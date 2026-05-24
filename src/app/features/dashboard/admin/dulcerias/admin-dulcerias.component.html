@@ -1,0 +1,107 @@
+<div class="page">
+  <div class="page-header">
+    <h1 class="page-title">Dulcerías</h1>
+    <span class="total-badge" *ngIf="total() > 0">{{ total() | number }} total</span>
+  </div>
+
+  <div class="filters">
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="search" class="search-input" placeholder="Buscar por nombre..."
+             [ngModel]="search()" (ngModelChange)="onSearch($event)" aria-label="Buscar dulcerías" />
+    </div>
+    <label for="aprobadaFilter" class="sr-only">Filtrar por aprobación</label>
+    <select id="aprobadaFilter" class="select-filter" [(ngModel)]="filtroAp" (change)="onFilterChange()">
+      <option value="">Todas</option>
+      <option value="false">Pendientes</option>
+      <option value="true">Aprobadas</option>
+    </select>
+  </div>
+
+  <!-- Skeleton -->
+  <div class="skeleton-list" *ngIf="loading()" aria-busy="true">
+    <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
+  </div>
+
+  <!-- Error -->
+  <div class="error-state" *ngIf="!loading() && error()">
+    <p>{{ error() }}</p>
+    <button class="btn-retry" (click)="load()">Reintentar</button>
+  </div>
+
+  <!-- Empty -->
+  <div class="empty-state" *ngIf="!loading() && !error() && dulcerias().length === 0">
+    <p>No se encontraron dulcerías.</p>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap" *ngIf="!loading() && !error() && dulcerias().length > 0">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Dulcería</th>
+          <th>Propietario</th>
+          <th>Ubicación</th>
+          <th>Registro</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of dulcerias()" [class.row-pending]="!d.aprobada">
+          <td class="td-name">
+            <p class="dulceria-name">{{ d.nombre }}</p>
+          </td>
+          <td class="muted">{{ d.nombrePropietario }}</td>
+          <td class="muted">{{ d.municipio }}, {{ d.provincia }}</td>
+          <td class="muted">{{ d.creadoEn | date:'d MMM yyyy' }}</td>
+          <td>
+            <div class="status-cell">
+              <span class="badge-ap" [class.aprobada]="d.aprobada">
+                {{ d.aprobada ? 'Aprobada' : 'Pendiente' }}
+              </span>
+              <span class="badge-activa" [class.activa]="d.estaActiva">
+                {{ d.estaActiva ? 'Activa' : 'Inactiva' }}
+              </span>
+            </div>
+          </td>
+          <td class="td-actions">
+            <button
+              *ngIf="!d.aprobada"
+              class="btn-aprobar"
+              [disabled]="actionId() === d.id"
+              (click)="aprobar(d)"
+              aria-label="Aprobar dulcería">
+              {{ actionId() === d.id ? '...' : 'Aprobar' }}
+            </button>
+            <button
+              *ngIf="d.aprobada || d.estaActiva"
+              class="btn-rechazar"
+              [disabled]="actionId() === d.id"
+              (click)="rechazar(d)"
+              aria-label="Rechazar / desactivar dulcería">
+              Rechazar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="total() > pageSize">
+    <button class="btn-page" (click)="prevPage()" [disabled]="page() === 1" aria-label="Anterior">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+    <span class="page-info">{{ page() }} / {{ totalPages() }}</span>
+    <button class="btn-page" (click)="nextPage()" [disabled]="page() >= totalPages()" aria-label="Siguiente">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,195 @@
+.tasa-page {
+  padding: 2rem;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.page-header { margin-bottom: 1.5rem; }
+.page-title { font-size: 1.5rem; font-weight: 800; color: #1a1a2e; margin: 0; letter-spacing: -0.03em; }
+
+/* ── Current rate ─────────────────────────────────────── */
+.current-card {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border-radius: 20px;
+  padding: 1.75rem 2rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.current-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 0.5rem;
+}
+
+.current-rate {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.rate-big {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.rate-unit {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+}
+
+.current-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.75);
+}
+
+.sep { color: rgba(255,255,255,0.35); }
+.nota { font-style: italic; }
+
+.no-tasa {
+  background: #f8f9fb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  p { margin: 0; }
+}
+
+/* ── Success ──────────────────────────────────────────── */
+.success-banner {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.75rem 1.125rem; background: #f0fdf4;
+  border-radius: 12px; border: 1.5px solid #bbf7d0;
+  color: #15803d; font-size: 0.85rem; font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Form card ────────────────────────────────────────── */
+.form-card {
+  background: #fff;
+  border-radius: 20px;
+  border: 1.5px solid #f1f5f9;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  padding: 1.75rem 2rem;
+}
+
+.form-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 0.35rem;
+}
+
+.form-hint {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+}
+
+.tasa-form { display: flex; flex-direction: column; gap: 1.125rem; }
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  label { font-size: 0.82rem; font-weight: 600; color: #374151; }
+
+  input {
+    width: 100%;
+    padding: 0.65rem 0.875rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #1a1a2e;
+    outline: none;
+    transition: border-color 150ms ease;
+    box-sizing: border-box;
+    &:focus { border-color: #6366f1; }
+    &::placeholder { color: #cbd5e1; }
+  }
+
+  &.has-error input { border-color: #ef4444; }
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 150ms ease;
+  &:focus-within { border-color: #6366f1; }
+
+  .prefix {
+    padding: 0 0.75rem;
+    background: #f8f9fb;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-right: 1.5px solid #e2e8f0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  input {
+    flex: 1;
+    border: none;
+    border-radius: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    &:focus { border-color: transparent; }
+  }
+}
+
+.req { color: #ef4444; }
+.field-error { font-size: 0.75rem; color: #ef4444; font-weight: 500; }
+.helper-text { font-size: 0.78rem; color: #6366f1; font-weight: 500; }
+
+.form-error {
+  background: #fef2f2; border-radius: 8px; padding: 0.65rem 0.875rem;
+  color: #b91c1c; font-size: 0.82rem; font-weight: 500;
+}
+
+.btn-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #6366f1;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease;
+  align-self: flex-start;
+
+  &:hover:not(:disabled) { background: #4f46e5; transform: translateY(-1px); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+}
+
+@media (max-width: 768px) {
+  .tasa-page { padding: 1.25rem 1rem; }
+  .form-card { padding: 1.25rem 1.25rem; }
+  .rate-big { font-size: 2.25rem; }
+}

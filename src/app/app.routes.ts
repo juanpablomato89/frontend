@@ -40,6 +40,13 @@ export const routes: Routes = [
         path: 'admin',
         canActivate: [authGuard, roleGuard(['Admin'])],
         loadComponent: () => import('./features/dashboard/admin/admin-dashboard.component').then(m => m.AdminDashboardComponent),
+        children: [
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+          { path: 'overview',    loadComponent: () => import('./features/dashboard/admin/overview/admin-overview.component').then(m => m.AdminOverviewComponent) },
+          { path: 'usuarios',    loadComponent: () => import('./features/dashboard/admin/usuarios/admin-usuarios.component').then(m => m.AdminUsuariosComponent) },
+          { path: 'dulcerias',   loadComponent: () => import('./features/dashboard/admin/dulcerias/admin-dulcerias.component').then(m => m.AdminDulceriasComponent) },
+          { path: 'tasa-cambio', loadComponent: () => import('./features/dashboard/admin/tasa-cambio/admin-tasa-cambio.component').then(m => m.AdminTasaCambioComponent) },
+        ],
       },
       {
         path: 'profile',
