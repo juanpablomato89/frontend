@@ -26,8 +26,15 @@ export const routes: Routes = [
       },
       {
         path: 'dashboard',
-        canActivate: [authGuard, roleGuard(['Propietario'])],
+        canActivate: [authGuard, roleGuard(['Dulceria', 'Propietario'])],
         loadComponent: () => import('./features/dashboard/owner/owner-dashboard.component').then(m => m.OwnerDashboardComponent),
+        children: [
+          { path: '', redirectTo: 'overview', pathMatch: 'full' },
+          { path: 'overview', loadComponent: () => import('./features/dashboard/owner/overview/owner-overview.component').then(m => m.OwnerOverviewComponent) },
+          { path: 'pedidos', loadComponent: () => import('./features/dashboard/owner/pedidos/owner-pedidos.component').then(m => m.OwnerPedidosComponent) },
+          { path: 'productos', loadComponent: () => import('./features/dashboard/owner/productos/owner-productos.component').then(m => m.OwnerProductosComponent) },
+          { path: 'dulceria', loadComponent: () => import('./features/dashboard/owner/dulceria/owner-dulceria.component').then(m => m.OwnerDulceriaComponent) },
+        ],
       },
       {
         path: 'admin',

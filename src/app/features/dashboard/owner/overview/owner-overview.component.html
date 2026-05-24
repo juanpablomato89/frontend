@@ -1,0 +1,118 @@
+<div class="overview-page">
+  <div class="page-header">
+    <h1 class="page-title">Resumen</h1>
+    <button class="btn-refresh" (click)="refresh()" [disabled]="loading()" aria-label="Actualizar estadísticas">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Skeleton -->
+  <div class="skeleton-grid" *ngIf="loading()" aria-busy="true">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6,7]"></div>
+  </div>
+
+  <!-- No dulcería -->
+  <div class="empty-state" *ngIf="!loading() && !dulceriaId()">
+    <p>Aún no tienes una dulcería registrada.</p>
+    <a class="btn-primary" routerLink="/dashboard/dulceria">Crear mi dulcería</a>
+  </div>
+
+  <!-- Stats grid -->
+  <div class="stats-grid" *ngIf="!loading() && stats() as s">
+
+    <div class="stat-card accent">
+      <div class="stat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div>
+        <p class="stat-value">{{ s.pedidosHoy }}</p>
+        <p class="stat-label">Pedidos hoy</p>
+      </div>
+    </div>
+
+    <div class="stat-card warning">
+      <div class="stat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div>
+        <p class="stat-value">{{ s.pedidosPendientes }}</p>
+        <p class="stat-label">Pendientes</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </div>
+      <div>
+        <p class="stat-value">{{ s.pedidosEsteMes }}</p>
+        <p class="stat-label">Este mes</p>
+      </div>
+    </div>
+
+    <div class="stat-card success">
+      <div class="stat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div>
+        <p class="stat-value">${{ s.ingresosMesUsd | number:'1.2-2' }}</p>
+        <p class="stat-label">Ingresos este mes</p>
+      </div>
+    </div>
+
+    <div class="stat-card success">
+      <div class="stat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+        </svg>
+      </div>
+      <div>
+        <p class="stat-value">${{ s.ingresosTotalUsd | number:'1.2-2' }}</p>
+        <p class="stat-label">Ingresos totales</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#f59f00"/>
+        </svg>
+      </div>
+      <div>
+        <p class="stat-value">{{ s.ratingPromedio > 0 ? (s.ratingPromedio | number:'1.1-1') : '—' }}</p>
+        <p class="stat-label">Rating promedio</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>
+        <p class="stat-value">{{ s.totalResenas }}</p>
+        <p class="stat-label">Reseñas</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Error -->
+  <div class="error-state" *ngIf="!loading() && error()">
+    <p>{{ error() }}</p>
+    <button class="btn-retry" (click)="refresh()">Reintentar</button>
+  </div>
+</div>

@@ -44,4 +44,27 @@ export class PedidoService {
   calificar(id: string, rating: number, comentario?: string): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${id}/calificar`, { rating, comentario }, { withCredentials: true });
   }
+
+  // ── Owner methods ────────────────────────────────────────────────────────
+  getByDulceria(
+    dulceriaId: string,
+    page = 1,
+    pageSize = 30,
+    estado?: string
+  ): Observable<PagedResponse<Pedido>> {
+    const params: Record<string, string | number> = { page, pageSize };
+    if (estado) params['estado'] = estado;
+    return this.http.get<PagedResponse<Pedido>>(
+      `${environment.apiUrl}/dulcerias/${dulceriaId}/pedidos`,
+      { params, withCredentials: true }
+    );
+  }
+
+  cambiarEstado(id: string, nuevoEstado: string): Observable<Pedido> {
+    return this.http.patch<Pedido>(
+      `${this.apiUrl}/${id}/estado`,
+      { estado: nuevoEstado },
+      { withCredentials: true }
+    );
+  }
 }

@@ -27,4 +27,22 @@ export class DulceriaService {
   update(id: string, data: Partial<Dulceria>): Observable<Dulceria> {
     return this.http.put<Dulceria>(`${this.apiUrl}/${id}`, data, { withCredentials: true });
   }
+
+  getMiDulceria(): Observable<Dulceria | null> {
+    return this.http.get<Dulceria | null>(`${this.apiUrl}/mi-dulceria`, { withCredentials: true });
+  }
+
+  getStats(id: string): Observable<DulceriaStats> {
+    return this.http.get<DulceriaStats>(`${this.apiUrl}/${id}/stats`, { withCredentials: true });
+  }
+}
+
+export interface DulceriaStats {
+  pedidosHoy: number;
+  pedidosPendientes: number;
+  pedidosEsteMes: number;
+  ingresosMesUsd: number;
+  ingresosTotalUsd: number;
+  ratingPromedio: number;
+  totalResenas: number;
 }

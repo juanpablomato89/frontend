@@ -1,4 +1,4 @@
-export type UserRole = 'Cliente' | 'Propietario' | 'Admin';
+export type UserRole = 'Cliente' | 'Propietario' | 'Dulceria' | 'Admin' | 'Invitado';
 export type PlanSuscripcion = 'Gratuito' | 'Basico' | 'Premium';
 
 export interface User {

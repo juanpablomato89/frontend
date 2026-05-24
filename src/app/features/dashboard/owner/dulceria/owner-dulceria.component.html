@@ -1,0 +1,139 @@
+<div class="dulceria-page">
+  <div class="page-header">
+    <h1 class="page-title">Mi dulcería</h1>
+  </div>
+
+  <!-- Skeleton -->
+  <div class="skeleton-form" *ngIf="loading()" aria-busy="true">
+    <div class="skeleton-block tall"></div>
+    <div class="skeleton-block"></div>
+    <div class="skeleton-block"></div>
+  </div>
+
+  <!-- Error loading -->
+  <div class="error-state" *ngIf="!loading() && error()">
+    <p>{{ error() }}</p>
+  </div>
+
+  <!-- Form -->
+  <div class="form-container" *ngIf="!loading() && !error()">
+
+    <!-- Status banner -->
+    <div class="status-banner" *ngIf="dulceria()">
+      <div class="status-item">
+        <span class="dot" [class.active]="dulceria()!.estaActiva"></span>
+        <span>{{ dulceria()!.estaActiva ? 'Activa' : 'Inactiva' }}</span>
+      </div>
+      <div class="status-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span>{{ dulceria()!.aprobada ? 'Aprobada' : 'Pendiente de aprobación' }}</span>
+      </div>
+    </div>
+
+    <!-- New dulceria notice -->
+    <div class="notice-banner" *ngIf="!dulceria()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>Completa tu perfil para que los clientes puedan encontrarte.</span>
+    </div>
+
+    <!-- Save success toast -->
+    <div class="success-banner" *ngIf="saved()" role="status" aria-live="polite">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      Cambios guardados correctamente.
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="save()" novalidate class="settings-form">
+
+      <!-- ── Información básica ── -->
+      <fieldset class="form-section">
+        <legend class="section-title">Información básica</legend>
+
+        <div class="form-field" [class.has-error]="hasError('nombre')">
+          <label for="dNombre">Nombre de la dulcería <span class="req">*</span></label>
+          <input id="dNombre" type="text" formControlName="nombre" placeholder="Ej. Dulcería La Rosa" />
+          <span *ngIf="hasError('nombre')" class="field-error" role="alert">Nombre requerido.</span>
+        </div>
+
+        <div class="form-field">
+          <label for="dDesc">Descripción</label>
+          <textarea id="dDesc" formControlName="descripcion" rows="3"
+                    placeholder="Cuéntales a los clientes qué hace especial a tu dulcería..."></textarea>
+        </div>
+
+        <div class="form-field" [class.has-error]="hasError('telefonoContacto')">
+          <label for="dTel">Teléfono de contacto <span class="req">*</span></label>
+          <input id="dTel" type="tel" formControlName="telefonoContacto" placeholder="+53 5555 5555"
+                 autocomplete="tel" inputmode="tel" />
+          <span *ngIf="hasError('telefonoContacto')" class="field-error" role="alert">Teléfono requerido.</span>
+        </div>
+      </fieldset>
+
+      <!-- ── Ubicación ── -->
+      <fieldset class="form-section">
+        <legend class="section-title">Ubicación</legend>
+
+        <div class="form-row two-cols">
+          <div class="form-field" [class.has-error]="hasError('municipio')">
+            <label for="dMunicipio">Municipio <span class="req">*</span></label>
+            <select id="dMunicipio" formControlName="municipio">
+              <option value="">Seleccionar...</option>
+              <option *ngFor="let m of municipios" [value]="m">{{ m }}</option>
+            </select>
+            <span *ngIf="hasError('municipio')" class="field-error" role="alert">Selecciona un municipio.</span>
+          </div>
+          <div class="form-field" [class.has-error]="hasError('provincia')">
+            <label for="dProvincia">Provincia <span class="req">*</span></label>
+            <input id="dProvincia" type="text" formControlName="provincia" placeholder="La Habana" />
+          </div>
+        </div>
+
+        <div class="form-field" [class.has-error]="hasError('direccionTexto')">
+          <label for="dDireccion">Dirección <span class="req">*</span></label>
+          <input id="dDireccion" type="text" formControlName="direccionTexto"
+                 placeholder="Ej. Calle 23 #456 e/ L y M" autocomplete="street-address" />
+          <span *ngIf="hasError('direccionTexto')" class="field-error" role="alert">Dirección requerida.</span>
+        </div>
+      </fieldset>
+
+      <!-- ── Delivery ── -->
+      <fieldset class="form-section">
+        <legend class="section-title">Entrega</legend>
+
+        <label class="toggle-label">
+          <input type="checkbox" formControlName="tieneDelivery" />
+          <span class="toggle-track"></span>
+          <span>Ofrezco servicio de delivery</span>
+        </label>
+
+        <div class="form-field mt-sm" *ngIf="form.get('tieneDelivery')?.value">
+          <label for="dRadio">Radio de delivery (km)</label>
+          <input id="dRadio" type="number" min="0" max="50" step="0.5"
+                 formControlName="radioDeliveryKm" placeholder="5" />
+          <span class="helper-text">Radio máximo en kilómetros desde tu ubicación.</span>
+        </div>
+      </fieldset>
+
+      <!-- ── Save ── -->
+      <div *ngIf="saveError()" class="form-error" role="alert">{{ saveError() }}</div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-save" [disabled]="form.invalid || saving()">
+          <svg *ngIf="!saving()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+          </svg>
+          <span *ngIf="!saving()">{{ dulceria() ? 'Guardar cambios' : 'Crear dulcería' }}</span>
+          <span *ngIf="saving()">Guardando...</span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
