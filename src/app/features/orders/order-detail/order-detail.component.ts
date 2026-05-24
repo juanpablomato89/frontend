@@ -17,17 +17,17 @@ export interface TimelineStep {
 }
 
 const TIMELINE_STATES: { estado: EstadoPedido; label: string }[] = [
-  { estado: 'Pendiente',         label: 'Pedido enviado' },
-  { estado: 'Confirmado',        label: 'Confirmado' },
-  { estado: 'EnPreparacion',     label: 'En preparación' },
-  { estado: 'ListoParaEntregar', label: 'Listo' },
-  { estado: 'EnCamino',          label: 'En camino' },
-  { estado: 'Entregado',         label: 'Entregado' },
+  { estado: 'Buscando',   label: 'Pedido enviado' },
+  { estado: 'Aceptado',   label: 'Confirmado' },
+  { estado: 'Preparando', label: 'En preparación' },
+  { estado: 'Listo',      label: 'Listo' },
+  { estado: 'EnCamino',   label: 'En camino' },
+  { estado: 'Entregado',  label: 'Entregado' },
 ];
 
 const STATE_ORDER: Record<EstadoPedido, number> = {
-  Pendiente: 0, Confirmado: 1, EnPreparacion: 2,
-  ListoParaEntregar: 3, EnCamino: 4, Entregado: 5, Cancelado: -1,
+  Buscando: 0, Aceptado: 1, Preparando: 2,
+  Listo: 3, EnCamino: 4, Entregado: 5, Cancelado: -1,
 };
 
 @Component({
@@ -112,7 +112,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
   get isCancellable(): boolean {
     const o = this.order();
     if (!o) return false;
-    return o.estado === 'Pendiente' || o.estado === 'Confirmado';
+    return o.estado === 'Buscando' || o.estado === 'Aceptado';
   }
 
   get isDeliverable(): boolean {

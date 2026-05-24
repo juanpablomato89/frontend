@@ -7,23 +7,23 @@ import { OrderSignalRService } from '../../../core/services/signalr/order-signal
 import { Pedido, EstadoPedido } from '../../../core/models/pedido.model';
 
 const STATUS_LABELS: Record<EstadoPedido, string> = {
-  Pendiente:         'Pendiente',
-  Confirmado:        'Confirmado',
-  EnPreparacion:     'En preparación',
-  ListoParaEntregar: 'Listo',
-  EnCamino:          'En camino',
-  Entregado:         'Entregado',
-  Cancelado:         'Cancelado',
+  Buscando:   'Buscando',
+  Aceptado:   'Confirmado',
+  Preparando: 'En preparación',
+  Listo:      'Listo para entregar',
+  EnCamino:   'En camino',
+  Entregado:  'Entregado',
+  Cancelado:  'Cancelado',
 };
 
 const STATUS_CLASS: Record<EstadoPedido, string> = {
-  Pendiente:         'badge-pending',
-  Confirmado:        'badge-confirmed',
-  EnPreparacion:     'badge-preparing',
-  ListoParaEntregar: 'badge-ready',
-  EnCamino:          'badge-transit',
-  Entregado:         'badge-delivered',
-  Cancelado:         'badge-cancelled',
+  Buscando:   'badge-pending',
+  Aceptado:   'badge-confirmed',
+  Preparando: 'badge-preparing',
+  Listo:      'badge-ready',
+  EnCamino:   'badge-transit',
+  Entregado:  'badge-delivered',
+  Cancelado:  'badge-cancelled',
 };
 
 @Component({
@@ -61,8 +61,8 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.error.set('');
     this.pedidoService.getMisPedidos(this.page(), this.pageSize).subscribe({
       next: res => {
-        this.orders.set(res.data);
-        this.total.set(res.total);
+        this.orders.set(res.items);
+        this.total.set(res.totalCount);
         this.loading.set(false);
       },
       error: () => {

@@ -1,7 +1,7 @@
 export type TipoEntrega = 'Delivery' | 'Recogida';
 export type EstadoPedido =
-  | 'Pendiente' | 'Confirmado' | 'EnPreparacion'
-  | 'ListoParaEntregar' | 'EnCamino' | 'Entregado' | 'Cancelado';
+  | 'Buscando' | 'Aceptado' | 'Preparando'
+  | 'Listo' | 'EnCamino' | 'Entregado' | 'Cancelado';
 
 export interface OrderItem {
   productoId: string;

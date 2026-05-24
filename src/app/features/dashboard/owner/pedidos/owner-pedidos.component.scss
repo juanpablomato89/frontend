@@ -152,13 +152,13 @@
   border-radius: 20px;
   white-space: nowrap;
 
-  &.estado-pendiente         { background: #fff9db; color: #b45309; }
-  &.estado-confirmado        { background: #eff6ff; color: #1d4ed8; }
-  &.estado-enpreparacion     { background: #ede9fe; color: #6d28d9; }
-  &.estado-listoparaentregar { background: #ecfdf5; color: #065f46; }
-  &.estado-encamino          { background: #e0f2fe; color: #0369a1; }
-  &.estado-entregado         { background: #dcfce7; color: #15803d; }
-  &.estado-cancelado         { background: #fef2f2; color: #b91c1c; }
+  &.estado-buscando   { background: #f8f9fb; color: #64748b; }
+  &.estado-aceptado   { background: #eff6ff; color: #1d4ed8; }
+  &.estado-preparando { background: #ede9fe; color: #6d28d9; }
+  &.estado-listo      { background: #ecfdf5; color: #065f46; }
+  &.estado-encamino   { background: #e0f2fe; color: #0369a1; }
+  &.estado-entregado  { background: #dcfce7; color: #15803d; }
+  &.estado-cancelado  { background: #fef2f2; color: #b91c1c; }
 }
 
 /* ── Action button ────────────────────────────────────── */

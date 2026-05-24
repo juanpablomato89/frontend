@@ -8,26 +8,26 @@ import { OrderSignalRService } from '../../../../core/services/signalr/order-sig
 import { Pedido, EstadoPedido } from '../../../../core/models/pedido.model';
 
 const ESTADOS: EstadoPedido[] = [
-  'Pendiente', 'Confirmado', 'EnPreparacion',
-  'ListoParaEntregar', 'EnCamino', 'Entregado', 'Cancelado',
+  'Buscando', 'Aceptado', 'Preparando',
+  'Listo', 'EnCamino', 'Entregado', 'Cancelado',
 ];
 
 const NEXT_STATE: Partial<Record<EstadoPedido, EstadoPedido>> = {
-  Pendiente:         'Confirmado',
-  Confirmado:        'EnPreparacion',
-  EnPreparacion:     'ListoParaEntregar',
-  ListoParaEntregar: 'EnCamino',
-  EnCamino:          'Entregado',
+  Buscando:  'Aceptado',
+  Aceptado:  'Preparando',
+  Preparando: 'Listo',
+  Listo:     'EnCamino',
+  EnCamino:  'Entregado',
 };
 
 const LABEL_MAP: Record<EstadoPedido, string> = {
-  Pendiente:         'Pendiente',
-  Confirmado:        'Confirmado',
-  EnPreparacion:     'En preparación',
-  ListoParaEntregar: 'Listo para entregar',
-  EnCamino:          'En camino',
-  Entregado:         'Entregado',
-  Cancelado:         'Cancelado',
+  Buscando:  'Buscando',
+  Aceptado:  'Aceptado',
+  Preparando: 'En preparación',
+  Listo:     'Listo para entregar',
+  EnCamino:  'En camino',
+  Entregado: 'Entregado',
+  Cancelado: 'Cancelado',
 };
 
 @Component({
@@ -78,7 +78,7 @@ export class OwnerPedidosComponent implements OnInit, OnDestroy {
     this.loading.set(true);
     const estado = this.filtroEstado() || undefined;
     this.pedidoService.getByDulceria(id, 1, 50, estado).subscribe({
-      next: r => { this.pedidos.set(r.data); this.loading.set(false); },
+      next: r => { this.pedidos.set(r.items); this.loading.set(false); },
       error: () => { this.error.set('No se pudieron cargar los pedidos.'); this.loading.set(false); },
     });
   }
