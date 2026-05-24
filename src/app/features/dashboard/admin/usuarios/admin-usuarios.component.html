@@ -55,7 +55,7 @@
       <tbody>
         <tr *ngFor="let u of usuarios()">
           <td class="td-user">
-            <div class="user-avatar">{{ u.nombre[0]?.toUpperCase() }}</div>
+            <div class="user-avatar">{{ u.nombre[0] | uppercase }}</div>
             <div>
               <p class="user-name">{{ u.nombre }}</p>
             </div>
